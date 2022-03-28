@@ -11,11 +11,16 @@ import (
 // Routes
 func Routes(app *fiber.App) {
 	db, _ := database.Connection()
+
 	fmt.Println(db)
 
-	app.Post("api/login", func(c *fiber.Ctx) error {
-		return c.JSON("hola")
+	app.Get("api/verifyme", func(c *fiber.Ctx) error {
+		c.Cookies("jwt")
+		fmt.Println(c.Cookies("jwt"))
+		return c.SendString(fmt.Sprint(c.Cookies("data")))
 	})
 
-	app.Post("api/register", controller.UserLogin)
+	app.Post("api/login", controller.UserLogin)
+
+	app.Post("api/register", controller.UserRegister)
 }
